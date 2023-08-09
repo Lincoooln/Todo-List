@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Card, Button, Col, Row, List, Input, Modal, message, Divider, Form } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
+import { Carousel } from 'antd';
 const { Item } = Form;
 
 function TodoList() {
@@ -31,27 +32,30 @@ function TodoList() {
 
     ];
   const [tasks, setTasks] = useState(initialTasks);
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [todoTasks, setTodoTasks] = useState(initialTasks);
   const [doingTasks, setDoingTasks] = useState([]);
   const [doneTasks, setDoneTasks] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [taskName, setTaskName] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
+  const [taskCount, setTaskCount] = useState(initialTasks.length);
+
 
   const showModal = () => {
       setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    const newTask = { id: uuidv4(), name: taskName, status: 'todo', details: taskDescription, updatedAt: Date.now() };
-    setTasks([...tasks, newTask]);
-    setTodoTasks([...todoTasks, newTask]);
-    setTaskName('');
-    setTaskDescription('');
-    setIsModalVisible(false);
-    message.success('保存成功');
+      const newTask = { id: uuidv4(), name: taskName, status: 'todo', details: taskDescription, updatedAt: Date.now() };
+      setTasks([...tasks, newTask]);
+      setTodoTasks([...todoTasks, newTask]);
+      setTaskName('');
+      setTaskDescription('');
+      setIsModalVisible(false);
+      setTaskCount(prevCount => prevCount + 1); // Increment the taskCount
+      message.success('保存成功');
   };
+
 
   const handleCancel = () => {
      setIsModalVisible(false);
@@ -85,34 +89,41 @@ function TodoList() {
     alert(task.details);
   };
 
-  // Rotate tasks every 2 seconds
-  useEffect(() => {
-    console.log(tasks); // this line
-    const interval = setInterval(() => {
-      setCurrentTaskIndex((prevIndex) => (prevIndex + 1) % tasks.length);
-    }, 2000);
-    return () => clearInterval(interval); // Cleanup when the component is unmounted
-  }, [tasks]);
-
   return (
     <div style={{ padding: '20px' }}>
           {/* ... Card and rotating tasks... */}
-          <Card style={{ backgroundColor: '#BFDFFF'}}>
+          <Carousel autoplay autoplaySpeed={2000}>
+              {tasks.map(task => (
+                  <div key={task.id}>
+                      <div
+                           style={{
+                               backgroundColor: '#BFDFFF',
+                               border: '1px solid #409FFF',
+                               borderRadius: '10px',
+                               height: '100px',
+                               display: 'flex',
+                               alignItems: 'center',
+                               justifyContent: 'space-between',
+                               padding: '20px'
+                           }}
+                      >
+                          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'left', flexGrow: 1 }}>
+                              <h3>
+                                  <InfoCircleOutlined style={{ color: 'blue', marginRight: '10px' }} />
+                                  {task.name}
+                              </h3>
+                              <p style={{ color: 'grey', fontSize: '0.8em', marginLeft: '24px'  }}>{task.details}</p>
+                          </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div>
-                                <h3>
-                                    <InfoCircleOutlined style={{ color: 'blue', marginRight: '10px' }} />
-                                    {tasks[currentTaskIndex].name}
-                                </h3>
-                            <p style={{ color: 'grey', fontSize: '0.8em' }}>{tasks[currentTaskIndex].details}</p>
-                        </div>
-                        <Button style={{ backgroundColor: 'blue', color: 'white' }} onClick={() => alert(tasks[currentTaskIndex].details)}>
-                            查看详情
-                        </Button>
-            </div>
-
-          </Card>
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <Button style={{ backgroundColor: 'blue', color: 'white' }} onClick={() => alert(task.details)}>
+                                  查看详情
+                              </Button>
+                          </div>
+                      </div>
+                  </div>
+              ))}
+          </Carousel>
           {/* Four Columns structure */}
           <Row gutter={16} style={{ marginTop: '20px' }}>
             {/* All Tasks Column */}
@@ -132,11 +143,11 @@ function TodoList() {
                         renderItem={item => (
 
                             <List.Item>
-                            <Card bordered style={{ width: '100%' }}>
+                            <Card bordered style={{ width: '100%' , borderRadius: '0'  }}>
 
                                 <List.Item.Meta
-                                    style={{ textAlign: 'left' }}
-                                    title={<div>{item.name}</div>}
+                                    style={{ textAlign: 'left', padding: '5px' }}
+                                    title={<div style={{ backgroundColor: 'lightgrey', padding: '15px', borderRadius: '10px', margin: '5px 0' }}>{item.name}</div>}
                                     description={<><Divider /><p>{item.details}</p></>}
                                 />
                                 {item.status === 'todo' && (
@@ -200,10 +211,10 @@ function TodoList() {
                   locale={{ emptyText: '暂无任务' }}
                   renderItem={item => (
                       <List.Item>
-                      <Card bordered style={{ width: '100%' }}>
+                      <Card bordered style={{ width: '100%', borderRadius: '0'  }}>
                           <List.Item.Meta
-                              style={{ textAlign: 'left' }}
-                              title={<div>{item.name}</div>}
+                              style={{ textAlign: 'left', padding: '5px' }}
+                              title={<div style={{ backgroundColor: 'lightgrey', padding: '15px', borderRadius: '10px', margin: '5px 0' }}>{item.name}</div>}
                               description={<><Divider /><p>{item.details}</p></>}
                           />
                           <Button style={{ color: '#FFBF80' }} onClick={() => handleStart(item)}>
@@ -225,11 +236,11 @@ function TodoList() {
                   locale={{ emptyText: '暂无任务' }}
                   renderItem={item => (
                       <List.Item>
-                      <Card bordered style={{ width: '100%' }}>
+                      <Card bordered style={{ width: '100%', borderRadius: '0'  }}>
                           <List.Item.Meta
-                              style={{ textAlign: 'left' }}
-                              title={<div>{item.name}</div>}
-                              description={<><Divider /><p>{item.details}</p></>}
+                          style={{ textAlign: 'left', padding: '5px' }}
+                          title={<div style={{ backgroundColor: 'lightgrey', padding: '15px', borderRadius: '10px', margin: '5px 0' }}>{item.name}</div>}
+                          description={<><Divider /><p>{item.details}</p></>}
                           />
                           <Button style={{ color: '	#80DF20' }} onClick={() => handleComplete(item)}>
                               点击完成
@@ -250,10 +261,10 @@ function TodoList() {
                   locale={{ emptyText: '暂无任务' }}
                   renderItem={item => (
                       <List.Item>
-                      <Card bordered style={{ width: '100%' }}>
+                      <Card bordered style={{ width: '100%', borderRadius: '0'  }}>
                           <List.Item.Meta
-                              style={{ textAlign: 'left' }}
-                              title={<div>{item.name}</div>}
+                              style={{ textAlign: 'left', padding: '5px' }}
+                              title={<div style={{ backgroundColor: 'lightgrey', padding: '15px', borderRadius: '10px', margin: '5px 0' }}>{item.name}</div>}
                               description={<><Divider /><p>{item.details}</p></>}
                           />
                           <Button style={{ color: '#409FFF' }} onClick={() => handleDetails(item)}>
