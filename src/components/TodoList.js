@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Card, Button, Col, Row, List, Input, Modal, message, Divider, Form } from 'antd';
+import { Card, Button, Col, Row, List, Input, Modal, message, Divider } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import { Carousel } from 'antd';
-const { Item } = Form;
+
 
 function TodoList() {
 
@@ -39,7 +39,7 @@ function TodoList() {
   const [taskName, setTaskName] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
   const [taskCount, setTaskCount] = useState(initialTasks.length);
-
+  console.log(taskCount);
 
   const showModal = () => {
       setIsModalVisible(true);
@@ -148,7 +148,7 @@ function TodoList() {
                                 <List.Item.Meta
                                     style={{ textAlign: 'left', padding: '5px' }}
                                     title={<div style={{ backgroundColor: 'lightgrey', padding: '15px', borderRadius: '10px', margin: '5px 0' }}>{item.name}</div>}
-                                    description={<><Divider /><p>{item.details}</p></>}
+                                    description={<><Divider /><p style={{ color: 'black'}}>{item.details}</p></>}
                                 />
                                 {item.status === 'todo' && (
                                     <Button style={{ color: '#FFBF80' }} onClick={() => handleStart(item)}>
@@ -215,7 +215,7 @@ function TodoList() {
                           <List.Item.Meta
                               style={{ textAlign: 'left', padding: '5px' }}
                               title={<div style={{ backgroundColor: 'lightgrey', padding: '15px', borderRadius: '10px', margin: '5px 0' }}>{item.name}</div>}
-                              description={<><Divider /><p>{item.details}</p></>}
+                              description={<><Divider /><p style={{ color: 'black'}}>{item.details}</p></>}
                           />
                           <Button style={{ color: '#FFBF80' }} onClick={() => handleStart(item)}>
                               点击开始
@@ -240,7 +240,7 @@ function TodoList() {
                           <List.Item.Meta
                           style={{ textAlign: 'left', padding: '5px' }}
                           title={<div style={{ backgroundColor: 'lightgrey', padding: '15px', borderRadius: '10px', margin: '5px 0' }}>{item.name}</div>}
-                          description={<><Divider /><p>{item.details}</p></>}
+                          description={<><Divider /><p style={{ color: 'black'}}>{item.details}</p></>}
                           />
                           <Button style={{ color: '	#80DF20' }} onClick={() => handleComplete(item)}>
                               点击完成
@@ -265,7 +265,7 @@ function TodoList() {
                           <List.Item.Meta
                               style={{ textAlign: 'left', padding: '5px' }}
                               title={<div style={{ backgroundColor: 'lightgrey', padding: '15px', borderRadius: '10px', margin: '5px 0' }}>{item.name}</div>}
-                              description={<><Divider /><p>{item.details}</p></>}
+                              description={<><Divider /><p style={{ color: 'black'}}>{item.details}</p></>}
                           />
                           <Button style={{ color: '#409FFF' }} onClick={() => handleDetails(item)}>
                               查看详情
